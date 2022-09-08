@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Главное меню</h1>
+    <div>
+        <a href="{{ url_for('sessions') }}">Сеансы</a>
+    </div>
+    <div>
+        <a href="{{ url_for('films')}}">Фильмы</a>
+    </div>
+    <div>
+        <a href="{{ url_for('statistic')}}">Статистика по продажам</a>
+    </div>
+{% endblock %}

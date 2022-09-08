@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Главное меню</h1>
+    <div>
+        <a href="{{ url_for('sessions') }}">Сеансы</a>
+    </div>
+    <div>
+        <a href="{{ url_for('user_tickets', user_id=current_user.id) }}">Мои билеты</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for ticket in tickets %}
+        <div class='ticket'>
+            <h3>{{ ticket.row_number, ticket.seat_number }}</h3>
+        </div>
+    {% endfor %}
+{% endblock %}

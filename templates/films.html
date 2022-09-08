@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for film in films %}
+        <div class='film'>
+            <h3>{{ film.film_name }}, {{film.release_year}}</h3>
+            {% if film.age_rate > 0 %}
+            <b class="age_rate">{{film.age_rate}}+</b>
+            {% endif %}
+            <h4>Режиссер - {{film.director}}</h4>
+            <h4>Продолжительность - {{film.duration}}</h4>
+            <p>{{film.description}}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

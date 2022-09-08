@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.search.label }}<br>
+            {{ form.search(size=32) }}
+            {% for error in form.search.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <div>
+        <h3>Жанры:</h3>
+        {% for genre_name, genre_stat in genres.items() %}
+        <p>{{genre_name}}: {{genre_stat}}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

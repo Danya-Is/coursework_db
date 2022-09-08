@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %}- CINEMA</title>
+    <style>
+        nav a {
+            color: #932727;
+            font-size: 3em;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+
+        .film {
+            padding: 20px;
+            margin: 10px;
+            background-color: #c0aeae;
+        }
+
+        .age_rate {
+                color: #d64641;
+                font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+<!--        <a href="{{ url_for('index') }}">FlaskApp</a>-->
+        <a href="#">Информация</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}">Выход</a>
+        {% endif %}
+    </nav>
+    <hr>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
