@@ -3,6 +3,8 @@ from flask_login import *
 from werkzeug.urls import url_parse
 
 from db import db, User, Film, Session, Hall, Seat, Ticket
+from forms.add_film import AddFilmForm
+from forms.add_session import AddSessionForm
 from forms.auth import LoginForm
 from forms.registration import RegistrationForm
 from forms.statistics import StatisticForm
@@ -12,6 +14,8 @@ app.config.from_object('config')
 
 login = LoginManager(app)
 login.login_view = 'sign_in'
+
+categories = {'Кинофильм': 1, 'Мультфильм': 2}
 
 
 @login.user_loader
@@ -90,7 +94,7 @@ def index():
 @app.route('/sessions')
 @login_required
 def sessions():
-    sessions_data = db.get_all('cinema_session')
+    sessions_data = db.get_future_sessions()
     sessions_list = []
     for i in range(len(sessions_data)):
         s = Session(*sessions_data[i])
@@ -98,6 +102,59 @@ def sessions():
         s.set_film_name(film.film_name)
         sessions_list.append(s)
     return render_template('sessions.html', sessions=sessions_list)
+
+
+@app.route('/add_session', methods=['GET', 'POST'])
+@login_required
+def add_session():
+    if not current_user.is_administrator:
+        return redirect(url_for('index'))
+    else:
+        form = AddSessionForm()
+        if form.validate_on_submit():
+            date = form.date.data
+            start_time = form.start_time.data
+            end_time = form.end_time.data
+            hall_id = form.hall_id.data
+            film = db.get_film_by_name(form.film_name.data, form.director.data)
+            if film is None:
+                form.film_name.errors.append('Такого фильма в кинотеатре нет')
+            else:
+                film_id = [0]
+                db.insert('cinema_session', {'session_date': date,
+                                             'start_time': start_time,
+                                             'hall_id': hall_id,
+                                             'film_id': film_id,
+                                             'end_time': end_time})
+                return redirect(url_for('add_session'))
+        return render_template('add_session.html', form=form)
+
+
+@app.route('/add_film', methods=['GET', 'POST'])
+@login_required
+def add_film():
+    if not current_user.is_administrator:
+        return redirect(url_for('index'))
+    else:
+        global categories
+        form = AddFilmForm()
+        if form.validate_on_submit():
+            name = form.name.data
+            director = form.director.data
+            year = form.year.data
+            description = form.description.data
+            duration = form.duration.data
+            age_rate = form.age_rate.data
+            category = categories[form.category.data]
+            db.insert('film', {'film_name': name,
+                               'director': director,
+                               'release_year': year,
+                               'description': description,
+                               'duration': duration,
+                               'age_rate': age_rate,
+                               'category': category})
+            return redirect(url_for('add_film'))
+        return render_template('add_film.html', form=form)
 
 
 @app.route('/session/<int:session_id>/tickets')
