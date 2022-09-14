@@ -10,7 +10,8 @@ class AddFilmForm(FlaskForm):
     director = StringField('Режиссер', validators=[DataRequired()])
     year = IntegerField('Год выпуска', validators=[DataRequired()], default=datetime.datetime.now().date().year)
     description = TextAreaField('Описание')
-    duration = TimeField('Продолжительность', validators=[DataRequired()], format='%h:%m', default=datetime.time(1, 30))
+    genres = StringField('Жанры', validators=[DataRequired()])
+    duration = TimeField('Продолжительность', validators=[DataRequired()], default=datetime.time(1, 30))
     age_rate = IntegerField('Ограничение по возрасту', validators=[DataRequired()])
     category = RadioField('Категория фильма', choices=['Кинофильм', 'Мультфильм'])
 

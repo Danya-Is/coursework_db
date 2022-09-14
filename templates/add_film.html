@@ -33,6 +33,13 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.genres.label }}<br>
+            {{ form.genres(size=128) }}<br>
+            {% for error in form.genres.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.duration.label }}<br>
             {{ form.duration(size=32) }}<br>
             {% for error in form.duration.errors %}

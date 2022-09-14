@@ -57,6 +57,16 @@ def insert(table: str, entry: dict):
     return True
 
 
+def insert_genres(genres, film_id):
+    for genre in genres:
+        genre = genre.strip()
+        genre_entry = get_by_unique_str('genre', 'genre_name', genre)
+        if genre_entry is None:
+            insert('genre', {'genre_name': genre})
+            genre_entry = get_by_unique_str('genre', 'genre_name', genre)
+        insert('film_genre', {'film_id': film_id, 'genre_id': genre_entry[0]})
+
+
 def get_film_by_name(name, director):
     query = 'SELECT * FROM film as f ' \
             'WHERE (f.film_name = \'{}\' AND f.director = \'{}\')'\
@@ -109,7 +119,10 @@ def get_film_stat(film_id: int) -> float:
     sum = 0
     for session in sessions:
         sum += get_session_stat(session[0])
-    return sum / len(sessions)
+    if len(sessions) == 0:
+        return 0
+    else:
+        return sum / len(sessions)
 
 
 def get_genre_stat(genre_id: int) -> float:

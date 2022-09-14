@@ -72,7 +72,7 @@ CREATE TABLE ticket (
     seat_id integer REFERENCES seat(id) ON DELETE CASCADE,
     UNIQUE (session_id, seat_id),
     user_id integer REFERENCES user_account(id) ON DELETE CASCADE,
-    cost integer NOT NULL DEFAULT 300
+    cost real NOT NULL DEFAULT 300
 );
 
 CREATE TABLE genre (

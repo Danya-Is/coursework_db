@@ -2,6 +2,8 @@ from flask import *
 from flask_login import *
 from werkzeug.urls import url_parse
 
+import babel
+
 from db import db, User, Film, Session, Hall, Seat, Ticket
 from forms.add_film import AddFilmForm
 from forms.add_session import AddSessionForm
@@ -25,6 +27,15 @@ def load_user(id):
         return None
     else:
         return User(*data)
+
+
+@app.template_filter()
+def format_datetime(value, format='time'):
+    if format == 'date':
+        format="EEEE, d MMMM y"
+    elif format == 'time':
+        format="HH:mm"
+    return babel.dates.format_datetime(value, format)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -146,6 +157,7 @@ def add_film():
             duration = form.duration.data
             age_rate = form.age_rate.data
             category = categories[form.category.data]
+            genres = form.genres.data.split(',')
             db.insert('film', {'film_name': name,
                                'director': director,
                                'release_year': year,
@@ -153,6 +165,9 @@ def add_film():
                                'duration': duration,
                                'age_rate': age_rate,
                                'category': category})
+            film_id = db.get_film_by_name(name, director)[0]
+            db.insert_genres(genres, film_id)
+
             return redirect(url_for('add_film'))
         return render_template('add_film.html', form=form)
 
@@ -173,9 +188,12 @@ def tickets(session_id):
 def user_tickets(user_id):
     tickets_data = db.get_user_tickets(user_id)
     tickets = []
+    seats = []
     for i in range(len(tickets_data)):
         ticket = Ticket(*tickets_data[i])
-        tickets.append(ticket)
+        seat = Seat(*db.get_by_unique_int('seat', 'id', ticket.seat_id))
+        session = Session(*db.get_by_unique_int('cinema_session', 'id', ticket.session_id))
+        tickets.append((ticket, seat, session))
     return render_template('tickets.html', tickets=tickets)
 
 

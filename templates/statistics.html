@@ -14,7 +14,7 @@
     <div>
         <h3>Жанры:</h3>
         {% for genre_name, genre_stat in genres.items() %}
-        <p>{{genre_name}}: {{genre_stat}}</p>
+        <p>{{genre_name}}: {{genre_stat * 100}}% билетов продано</p>
         {% endfor %}
     </div>
 {% endblock %}

@@ -9,6 +9,7 @@ psycopg2-binary = "*"
 flask-wtf = "*"
 flask-login = "*"
 email-validator = "*"
+babel = "*"
 
 [dev-packages]
 
