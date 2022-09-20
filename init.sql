@@ -22,8 +22,7 @@ CREATE TABLE administrator (
 );
 
 CREATE TABLE client (
-    id integer PRIMARY KEY REFERENCES user_account(id) ON DELETE CASCADE,
-    cinema_id integer REFERENCES cinema(id) ON DELETE CASCADE
+    id integer PRIMARY KEY REFERENCES user_account(id) ON DELETE CASCADE
 );
 
 CREATE TABLE hall (
@@ -96,8 +95,8 @@ VALUES ('3я Парковая, д2', 'Иллюзион');
 INSERT INTO administrator (id, cinema_id)
 VALUES (2, 1);
 
-INSERT INTO client (id, cinema_id)
-VALUES (1, 1);
+INSERT INTO client (id)
+VALUES (1);
 
 INSERT INTO hall (hall_number, hall_name, cinema_id)
 VALUES (1, 'Москва', 1), (2, 'Владивосток', 1), (3, 'Ленинград', 1);
